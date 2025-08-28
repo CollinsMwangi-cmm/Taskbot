@@ -31,14 +31,17 @@ def add_new_task(task: str):
 
 #function for showing the list of task
 def show_list():
+    load_task()
     if not tasks:
         return "There is no any task currently"
     else:
         output = "\n".join([f"{i+1}. {t['Task']} - {t['Status']}" for i,t in enumerate(tasks)])
         return "Your to do list:\n" + output
+        
 
 
 def delete_task(index : int):
+    load_task()
     if 0 <= index < len(tasks):
         removed_task = tasks.pop(index )
         save_task() 
@@ -49,13 +52,13 @@ def delete_task(index : int):
 
 
 def mark_task(index: int):
+    load_task()
     if 0 <= index < len(tasks):
         tasks[index ]['Status'] = 'completed'
         save_task()
         return f"{tasks[index]['Task']} is marked as completed"
     else:
         return "❌ Task number was not found"
-
 
 
 

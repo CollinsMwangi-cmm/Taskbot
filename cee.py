@@ -11,28 +11,34 @@ import subprocess
 import webbrowser
 from google.cloud import dialogflow_v2beta1 as dialogflow
 from jinxauto import *
-from todoapp import add_new_task, show_list, delete_task, mark_task
+from todoapp import *
+
 
 load_dotenv()
-
 DIALOGFLOW_PROJECT_ID = 'jinx-droo'
 DIALOG_LANGUAGE_CODE = 'en'
 SESSION_ID = 'me'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'private_key.json'
 
 
-
-def DF(text_to_be_analyze):
+#-----------------------DIALOGFLOW---------------------------------------------
+def DF(text_to_be_analyze): # sends text to dialogflow and return what bruno should do next
     session_client = dialogflow.SessionsClient() #used to interact with the dialogflow API allowing the function to send and receive messages
     session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID) #used to create a unique identifier necessary for maintaining the conversation context with Dialogflow.
+    
     text_input = dialogflow.TextInput(text=text_to_be_analyze, language_code=DIALOG_LANGUAGE_CODE) # rep the user's input as a text input object, which is then used to send the user's message to Dialogflow for processing.
     query_input = dialogflow.QueryInput(text=text_input) #used by dialogflow API to understand the user's intent and context of the conversation for processing
+    
+    
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
         print("Query text:", response.query_result.query_text)
-        jinx_do = response.query_result.intent.display_name
+        
+        jinx_do = response.query_result.intent.display_name # intent that you get back from dialogflow
         print("| Detected intent is: " + jinx_do + " Detected intent confidence : ", response.query_result.intent_detection_confidence, end="|")
-        answer = response.query_result.fulfillment_text
+        
+        answer = response.query_result.fulfillment_text # response from dialogflow
+        
     except Exception as e:
         print("Exception: " + str(e))
         
@@ -54,6 +60,8 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
 
+
+
 def takeCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -72,6 +80,7 @@ def takeCommand():
             return " "
         
 
+
 def det_sound():
     winsound.Beep(500,200)
 
@@ -82,12 +91,17 @@ def rep_sound():
 def website(url):
     webbrowser.get().open(url)
     
+    
+    
 def convo_flow():
+    load_task()
     while True:
         said = takeCommand()
         if not said:
             print("I didn't catch that, please try again.")
             continue
+        
+        
         do_now = DF(said)
         if "do_now" == "exit":
             speak("exiting the loop sir")
@@ -125,7 +139,7 @@ def convo_flow():
         elif "how are you" in said:
             speak("doing well,")
         elif "goodbye" in said:
-            speak("Goodbye! Have a great day ahead!")
+            speak("")
             break
         
         elif "Good Morning" in said:
@@ -179,15 +193,33 @@ def convo_flow():
         elif "goodnight"  in said:
             speak("Goodnight! Sleep well.")
         
-        elif "add task" in said:
-            task = said.replace("add task", "").strip()
-            if task:
-                result = add_new_task(task)
-            else:
-                result = "Please say the task you want to add."
-            speak(result)
+        
+### add task, show task, complete task, delete task
 
-        elif "show my task" in said:
+### --------ADD TASKS--------
+
+        elif do_now == "add task":
+            
+            
+            follow_up = takeCommand().strip()
+            
+           
+            if follow_up and follow_up.lower() != " ":
+                result = add_new_task(follow_up)
+            else:
+                result = "I didn't catch that task. Please try again."
+
+
+                
+            speak(result)
+            break
+            
+           
+            
+            
+
+###----------SHOW TASKS--------
+        elif do_now == "show task":
             result = show_list()
             speak(result)
 
@@ -199,7 +231,7 @@ def convo_flow():
                 result = "Please say a valid task number."
             speak(result)
             
-        
+#####-----------DELETE TASKS--------
         elif "delete task" in said:
             try:
                 num = int(said.split()[-1])-1
@@ -209,8 +241,6 @@ def convo_flow():
             speak(result)
         
         elif do_now == "stop":
-            print("Stopping sir")
-        
             break
             
     time.sleep(2)

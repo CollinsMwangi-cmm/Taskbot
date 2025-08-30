@@ -1,62 +1,10 @@
 [
     {
-        "Task": "show my task",
+        "Task": "do laundry at 7 a.m.",
         "Status": "pending"
     },
     {
-        "Task": "can you list my",
-        "Status": "pending"
-    },
-    {
-        "Task": "i want you to add a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "i want to add a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "dancing",
-        "Status": "pending"
-    },
-    {
-        "Task": "how to add a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "i want you to add a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "add a taskiadd a task add a taskwadd a taskaadd a tasknadd a tasktadd a task add a taskyadd a taskoadd a taskuadd a task add a tasktadd a taskoadd a task add a taskaadd a taskdadd a taskdadd a task add a taskaadd a task add a tasktadd a taskaadd a tasksadd a taskkadd a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "add a taskiadd a task add a taskwadd a taskaadd a tasknadd a tasktadd a task add a taskyadd a taskoadd a taskuadd a task add a tasktadd a taskoadd a task add a taskaadd a taskdadd a taskdadd a task add a taskaadd a task add a tasktadd a taskaadd a tasksadd a taskkadd a task",
-        "Status": "pending"
-    },
-    {
-        "Task": "remind me to",
-        "Status": "pending"
-    },
-    {
-        "Task": "adidas",
-        "Status": "pending"
-    },
-    {
-        "Task": "swimming at 8 p.m.",
-        "Status": "pending"
-    },
-    {
-        "Task": "go dancing at 7",
-        "Status": "pending"
-    },
-    {
-        "Task": "dancing",
-        "Status": "pending"
-    },
-    {
-        "Task": "swimming at 8:00",
+        "Task": "wake up at 6 a.m.",
         "Status": "pending"
     }
 ]

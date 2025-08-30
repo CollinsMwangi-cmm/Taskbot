@@ -56,7 +56,7 @@ def speak(text):
     engine = pyttsx3.init('sapi5')
     voices = engine.getProperty('voices')
     engine.setProperty('voice',voices[0].id)
-    print("CEE: "+ text + "\n")
+    print("Bruno: ", text , "\n")
     engine.say(text)
     engine.runAndWait()
 
@@ -72,7 +72,7 @@ def takeCommand():
         
         try:
             command = r.recognize_google(audio, language='en-in')
-            print("Cee think you said: "+ command)
+            print("Bruno think you said: "+ command)
             return command.lower()
             
         except Exception as e:
@@ -199,46 +199,67 @@ def convo_flow():
 ### --------ADD TASKS--------
 
         elif do_now == "add task":
-            
-            
+              
             follow_up = takeCommand().strip()
             
-           
             if follow_up and follow_up.lower() != " ":
                 result = add_new_task(follow_up)
             else:
                 result = "I didn't catch that task. Please try again."
-
-
-                
+    
             speak(result)
             break
             
-           
-            
-            
+                
 
 ###----------SHOW TASKS--------
         elif do_now == "show task":
             result = show_list()
-            speak(result)
+            speak(result) 
+            break
+            
+            
+######-----------COMPLETE A TASK------
 
-        elif "complete task" in said:
+        elif do_now == "complete task":
+            task_ref = said.replace("complete task", "").strip()
+            
+            if not task_ref:
+                speak("Which task do you want to complete? Please say the task number or name.")
+                task_ref = takeCommand().strip()
+                
+            
             try:
-                num = int(said.split()[-1]) - 1
-                result = mark_task(num)
-            except:
-                result = "Please say a valid task number."
+                if task_ref.isdigit():
+                    result = mark_task(int(task_ref)-1)
+                else:
+                    result = mark_task(task_ref)
+            except Exception as e:
+                result = "Sorry, I could not complete that task."
             speak(result)
             
+            break
+            
 #####-----------DELETE TASKS--------
-        elif "delete task" in said:
+        elif do_now == "delete task":
+            task_ref = said.replace("delete task", "").strip()
+            
+            if not task_ref:
+                speak("Which task do you want to delete? Please say the task number or name.")
+                task_ref = takeCommand().strip()
+                
+                
             try:
-                num = int(said.split()[-1])-1
-                result = delete_task(num)
-            except:
-                result = "Please say a valid task number."
+                if task_ref.isdigit():
+                    result = delete_task(int(task_ref)-1)
+                else:
+                    result = delete_task(task_ref)
+                    
+            except Exception as e:
+                result = "Sorry, I could not delete that task."
             speak(result)
+            
+            break
         
         elif do_now == "stop":
             break

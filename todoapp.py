@@ -40,24 +40,46 @@ def show_list():
         
 
 
-def delete_task(index : int):
+def delete_task(ref):
     load_task()
-    if 0 <= index < len(tasks):
-        removed_task = tasks.pop(index )
-        save_task() 
-        return f"task '{removed_task['Task']}' was removed"
-    else:
-        print( "❌ Task number was not found")  
+    #case1. if task is referred by its index
+    if isinstance(ref, int):
+        if 0 <= ref < len(tasks):
+            removed_task = tasks.pop(ref )
+            save_task() 
+            return f"task '{removed_task['Task']}' was removed"
+        else:
+            print( "❌ Task number was not found") 
+    #case2. if task is referred by its name
+    elif isinstance(ref, str):
+        for i, task in enumerate(tasks):
+            if ref.lower() in task['Task'].lower():
+                removed_task = tasks.pop(i)
+                save_task()
+                return f" task '{removed_task['Task']} was removed. "
+        return "❌ Task not found"
         
 
 
-def mark_task(index: int):
+def mark_task(ref):
     load_task()
-    if 0 <= index < len(tasks):
-        tasks[index ]['Status'] = 'completed'
-        save_task()
-        return f"{tasks[index]['Task']} is marked as completed"
-    else:
+    
+    #case1. if task is referred by its index
+    if isinstance(ref, int):
+        if 0 <= ref < len(tasks):
+            tasks[ref ]['Status'] = 'completed'
+            save_task()
+            return f"{tasks[ref]['Task']} is marked as completed"
+        else:
+            return "❌ Task number was not found"
+        
+    #case2. if task is referred by its name
+    elif isinstance (ref, str):
+        for task in tasks:
+            if ref.lower() and task['Task'].lower():
+                task['Status'] = 'completed'
+                save_task()
+                return f"'{task['Task']}' is marked as completed."
         return "❌ Task number was not found"
 
 
@@ -89,6 +111,7 @@ def mark_task(index: int):
             print("Existing the application")
             exit()
         else:
+        
             print("Invalid output please select 1,2,3 or 4")
         print("goodbye👋👋")
 
